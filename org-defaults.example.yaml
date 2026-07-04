@@ -1,0 +1,8 @@
+# 產生器 org 預設（範例）。複製為 org-defaults.yaml（已 gitignore、不進公開 repo），
+# 或設環境變數 GENERATOR_ORG_DEFAULTS 指向你的檔。
+# 這些是「你的組織」的內部值；公開 repo 只留這份 placeholder。
+bq_project: your-source-gcp-project      # 資料源 GCP 專案
+bq_dataset: your_dataset                 # 預設 BigQuery dataset
+edge_to: resource:your-default-source    # 預設服務鏈邊（catalog ref；契約要求 ≥1 條）
+edge_type: reads-data
+timezone: Asia/Taipei

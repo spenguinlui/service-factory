@@ -1,0 +1,50 @@
+# job 配方（服務製造器 Stage 2）— 抽自 evox-daily-report walking skeleton
+# archetype = catalog spec.type "job"：排程觸發、讀源、(可選)Claude、寫輸出、自動登記。
+archetype: job
+description: 排程 Cloud Run Job：讀資料源 →(可選)Claude 判斷/生成 → 寫 GCS 輸出，自動登記進 catalog。
+
+# 祝福選型（右尺寸，不自架重機）
+blessed_stack:
+  runtime: Cloud Run Job
+  trigger: Cloud Scheduler (cron)
+  region: asia-east1
+  ai: Claude (Agent SDK / API key in Secret Manager)   # 可選
+  source: BigQuery (可跨專案唯讀)
+  output: GCS bucket (純 GCP IAM，避開 Workspace 外部帳號限制)
+  hardening: [idempotent, structured-log, per-service-SA-least-priv]
+
+# 每份 job 答這 7 問（= /design 輸入；scaffold 時填進 README）
+seven_questions:
+  1_fixed_flow: 哪些是固定流程（查詢/搬運/格式化）？
+  2_llm_judgment: 哪些要 LLM 判斷/生成？（沒有就拿掉 Claude 段）
+  3_side_effects: 哪些動到外部/資料？
+  4_human_approval: 要不要人工 approval？（job 通常否）
+  5_idempotent: 失敗重試會不會重複副作用？→ 本配方預設查輸出是否已存在
+  6_trace: 要記哪些 trace？→ structured JSON log
+  7_eval: 怎麼驗？→ 指定 REPORT_DATE 手動跑 + 看輸出
+
+# scaffold 參數（make_service 時要問）
+params:
+  - name: service_name        # repo / job / catalog id，小寫連字號
+    required: true
+  - name: description
+    required: true
+  - name: schedule            # cron
+    default: "0 8 * * *"
+  - name: timezone
+    default: Asia/Taipei
+  - name: uses_ai             # 要不要 Claude 段
+    default: true
+  - name: bq_project          # 跨專案讀來源（org-defaults 提供）
+    default: （org-defaults）
+  - name: data_class          # 0-B 契約必填
+    default: internal
+
+# 部署＝部署器的事（私有 service-deployer；IAM/secret/輸出槽等 org 細節在那邊固化）
+deploy: 由部署器決定（本配方只定義作者時骨架與參數）
+
+# 登記（過 0-B 畢業契約：type + data_class + ≥1 typed 邊）
+register:
+  kind: Component
+  spec_type: job
+  edge: 依 org-defaults / params（契約要求 ≥1 typed 邊）

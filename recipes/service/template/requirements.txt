@@ -1,0 +1,4 @@
+fastapi>=0.110
+uvicorn>=0.30
+google-cloud-bigquery>=3.25
+anthropic>=0.69

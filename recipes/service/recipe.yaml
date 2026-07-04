@@ -1,0 +1,40 @@
+# service 配方（服務製造器 Stage 4）— Cloud Run HTTP 服務（非 job）
+# archetype = catalog spec.type "service"：常駐 HTTP 端點；與 job 共用 build/IAM/契約/身分機制。
+archetype: service
+description: Cloud Run HTTP 服務（FastAPI）：常駐端點，可選 Claude/BQ。與 job 同一套工廠機制，差在部署形狀（service 非 job、無 scheduler）。
+
+blessed_stack:
+  runtime: Cloud Run service   # 非 job；無 Cloud Scheduler
+  region: asia-east1
+  framework: FastAPI + uvicorn
+  ai: Claude (可選)
+  source: BigQuery (可選，跨專案唯讀)
+  hardening: [structured-log, per-service-SA-least-priv, health-endpoint, authenticated-by-default]
+
+seven_questions:
+  1_fixed_flow: 端點固定邏輯？
+  2_llm_judgment: 哪些要 LLM？
+  3_side_effects: 有無外部副作用？（有→idempotency key）
+  4_human_approval: 通常否（同步 API）
+  5_idempotent: 冪等鍵（若寫資料）
+  6_trace: structured log + request id
+  7_eval: 打 /health + 端點手測
+
+params:
+  - {name: service_name, required: true}
+  - {name: description, required: true}
+  - {name: uses_ai, default: false}
+  - {name: bq_project, default: （org-defaults）}
+  - {name: data_class, default: internal}
+  - {name: edge_to, default: （org-defaults）}   # 契約需 ≥1 typed 邊
+  - {name: edge_type, default: reads-data}
+
+deploy:
+  form: cloud-run-service          # 部署器依此分支（無 scheduler）
+  auth: no-allow-unauthenticated   # 預設認證保護；要公開再說
+  # org 細節（專案/IAM/secret）＝部署器（私有 service-deployer）固化
+
+register:
+  kind: Component
+  spec_type: service
+  edge: { from_params: true }      # 邊由 params edge_to/edge_type 決定
