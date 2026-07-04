@@ -1,8 +1,9 @@
 {
   "name": "service-factory",
   "displayName": "服務製造器",
-  "version": "0.1.0",
-  "description": "非工程師用對話做出並維護服務（目前支援 job archetype）。薄殼：重邏輯與強制在工廠 MCP server 側。",
-  "author": { "name": "營運系統組" },
-  "mcpServers": "./.mcp.json"
+  "version": "0.2.0",
+  "description": "非工程師用對話把「已驗證好用的東西」固化成服務包資料夾（bundle spec v1），交付工程師部署。純 skill 殼：不連任何 server、不部署。",
+  "author": {
+    "name": "營運系統組"
+  }
 }

@@ -1,19 +1,15 @@
-# 服務製造器 Plugin（Cowork，非工程師）
+# 服務包產生 Plugin（非工程師）
 
-薄殼 plugin：讓非工程師用對話做出/維護 `job` 服務。重邏輯與強制在工廠 MCP server 側。
+純 skill 殼：讓非工程師用對話把「已驗證好用的東西」固化成**服務包資料夾**——到此為止。
+**不含任何 connector**（非工程師不需要連任何 server、不需要任何授權）。
 
-## 結構
 - `.claude-plugin/plugin.json` — manifest
-- `.mcp.json` — 綁 remote 工廠 MCP connector（`streamable-http`）
-- `skills/make-service/SKILL.md` — 對話流程（薄）
+- `skills/make-service/SKILL.md` — 對話流程（畢業判斷 → 收參數 → 產包 → 交付工程師）
 
-## 安裝前提
-1. **工廠 remote MCP server 已部署**，把 `.mcp.json` 的 `url` 換成實際 Cloud Run URL（`https://.../mcp`）。
-2. connector 認證接上（OAuth / IAP），server 才拿得到使用者身分做蓋章。
+## 流程
+1. 平常直接請 Claude 做（一次性，不產包）。
+2. 用順了、要固定 → 說「幫我變成每天自動跑的服務」→ Claude 產出服務包資料夾。
+3. 把資料夾**交給工程師**：工程師用部署器（私有 service-deployer）驗證、部署、登記。
 
-## 佈署路徑（現實）
-- Claude Code **尚未 GA**「組織管理員一鍵預推 MCP 給全 org」。現階段用**私有 plugin marketplace**（私有 git repo）讓成員 `claude plugin install`，或 project-scope `.mcp.json`。
-- 待 Managed scope GA 再改為管理員預推。
-
-## 安全
-工廠能建 repo / 部署 / 改 IAM / 登記——remote 上線前**必先鎖好身分驗證**（`--no-allow-unauthenticated` + IAP/OAuth；server 讀認證 header 當 actor，禁匿名）。
+## 佈署給同仁
+私有 plugin marketplace / 手動安裝皆可；因為不含 connector 與 secret，佈署零風險。

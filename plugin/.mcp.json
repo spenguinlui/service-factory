@@ -1,9 +1,0 @@
-{
-  "mcpServers": {
-    "factory": {
-      "type": "streamable-http",
-      "url": "https://REPLACE-WITH-DEPLOYER-MCP-URL/mcp",
-      "headers": {}
-    }
-  }
-}

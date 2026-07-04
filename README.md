@@ -24,7 +24,7 @@ python3 generator.py my-service --out . \
 ## 內容
 - `generator.py` — 產生器本體（CLI）
 - `recipes/<archetype>/` — 配方（`job`、`service`；recipe.yaml 選型 + template/ 骨架）
-- `plugin/` — Cowork/Claude Code plugin（非工程師對話殼；連接與提交流程 R5 更新）
+- `plugin/` — Cowork/Claude Code plugin（非工程師對話殼：產包→交付工程師；**純 skill、零 connector**）
 - `registry_contract.py` — 【vendored】合約 validator 副本；**正典在 ai-infra-management**，spec 變動須同步
 
 ## org 預設（org-defaults.yaml）
