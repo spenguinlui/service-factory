@@ -7,7 +7,7 @@
 兩者唯一的合約＝**bundle spec v1**：見 public repo
 `ai-infra-management/docs/service-factory/bundle-spec.md`。
 
-> 狀態：私有開發中；spec 穩定 + 安全審查（R4）後翻 public。
+> 狀態：**public**（2026-07-04，R4 安全審查後發布）。內部工作 remote 在自管 Gitea。
 > 架構背景：`ai-infra-management/docs/service-factory/target-architecture.md`（ADR 0007）。
 
 ## 用法
